@@ -1,6 +1,6 @@
 <script>
 /*
-*Puts out the Hot Stuff
+*Droplet puts out the Hot Stuff..
 *Pay The Bird Dog Renturly
 *Cash Buyer is Indexed By Google
 *On Keyup fetch("https://maps.googleapis.com/maps/api/place/autocomplete/json?parameters")
