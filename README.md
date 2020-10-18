@@ -10,7 +10,7 @@ Files: Pay The Bird Dog Fistfuls of Cash
 
 *MySql - Put The Model in the Controller: is a SELECT statement
 *PHP
-*HTML: MVC is Machine Learning
+*HTML: Architecture is MVC
 *JavaScript
 *CSS
 *Ubuntu errors
