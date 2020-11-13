@@ -1,0 +1,52 @@
+<script>
+/*
+*Droplet puts out the Hot Stuff..
+*Pay The Bird Dog Renturly
+*Cash Buyer is Indexed By Google
+*On Keyup fetch("https://maps.googleapis.com/maps/api/place/autocomplete/json?parameters")
+*
+*
+*
+*/
+function pillage(renturly)	{
+
+	return new Promise(resolve => {
+
+		fetch(renturly).then(
+			response => {
+				alert(response);
+			},
+			rejection => {
+			
+				alert(rejection.message);
+				
+			}
+		);
+	})
+	//Close the Deal
+}
+
+const pay = async (location) => {
+
+ pillage('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=location&key=');
+
+}
+
+function keyUp()
+{
+	try {
+	
+		var location = 'Edmonton';
+
+		pay(location);
+	
+		} catch (e) {
+	
+		//alerts it to the DOM
+		alert(e);
+	
+	}
+}
+
+
+</script>
