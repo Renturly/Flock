@@ -3,17 +3,17 @@ Pay The Bird Dog
 
 <?php
 
-/*
-Module - Bring Me Renturly from NYC: 
-
-Files: Pay The Bird Dog Fistfuls of Cash
-
+/* 
+*Files: Pay The Bird Dog Fistfuls of Cash
+*
+*Flock Pricing from NYC
+*
+*Ubuntu Errors: is Disk Space
 *MySql - Put The Model in the Controller: is a SELECT statement
 *PHP
 *HTML: Architecture is MVC
 *JavaScript
 *CSS
-*Ubuntu errors
 */
 
 echo "Match the Urly Bird with Birds of a Feather using the Urly Bird Grade";
