@@ -4,7 +4,10 @@
     
 	const portfolioJSON = await portfolio.json();
 	
-	console.log(portfolioJSON);
+	console.log(portfolioJSON.portfolio_id);
+	document.getElementById('portfolio').innerHTML = portfolioJSON.portfolio_id;
+	
+
 }
 
 	doggingFistfuls();
