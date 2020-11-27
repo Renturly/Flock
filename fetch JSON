@@ -1,0 +1,12 @@
+<script>
+    const doggingFistfuls = async () => {
+	const portfolio = await fetch("https://www.accesstheflock.io/matchTable/DoggingFistfuls");
+    
+	const portfolioJSON = await portfolio.json();
+	
+	console.log(portfolioJSON);
+}
+
+	doggingFistfuls();
+
+</script>
