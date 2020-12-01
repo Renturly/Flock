@@ -12,4 +12,19 @@
 
 	doggingFistfuls();
 
+
+//.then() chained to fetch callback functions for success and error
+fetch("https://www.accesstheflock.io/matchTable/DoggingFistfuls")
+.then(
+		response => {
+			response.text().then(function (text) {
+  			console.log(text); 
+});
+		},
+		rejection => {
+		console.error(rejection.message);
+		});
+
+
+
 </script>
