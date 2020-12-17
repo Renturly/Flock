@@ -14,23 +14,8 @@ Pay The Bird Dog
 *HTML: Architecture is MVC
 *JavaScript
 *CSS
+*
+*Unsupervised ML
 */
-
-echo "Match the Urly Bird with Birds of a Feather using the Urly Bird Grade";
-
-//Facebook
-if($OKBird)
-{
-$this->render('list',array(
-			'model'=>$model,
-			'buyers_markets'=>$buyers_markets,
-		));
-} else {
-$this->render('list',array(
-			'model'=>$model,
-			'buyers_markets'=>$buyers_markets,
-		));
-
-}
-
 ?>
+
