@@ -79,6 +79,8 @@ class MatchTableController extends Controller
 			
 			$this->layout='//layouts/column1';
 		
+			Yii::app()->user->setFlash('info', "<a href='https://youtu.be/63bWxkG_KSQ'>The Military: Urly Adopters - How To Build A Cash Buyers List </a>");
+		
 			$this->render('matches');
 		//}
 
@@ -287,7 +289,7 @@ foreach($data as $pay)
     	
 
     	//p-value < 0.05: Common Sense
-print json_encode(array("vetting_fee"=>round($result->cor, 2))); //Wire Transfer: Float
+print json_encode(array("No Tire Kickers"=>$result->ln_model)); //Wire Transfer: Float
 		die();
    
 		} catch (Exception $e) {
@@ -377,9 +379,10 @@ $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-3 month'));
 		
 		//sorted Trillionaire to Minimum Purchase Price
 		//print_r($cash_buyers_list);
-		$flock = 111000;
+		$flock = 101000;
 		$right = max($cash_buyers_list);
 		$left = min($cash_buyers_list);
+		
 		$motivated_sellers_list = array();
 		
 		
@@ -409,10 +412,10 @@ $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-3 month'));
 					//{"fistfuls":"$3025"}{"fistfuls":"$1538"}{"fistfuls":"$794"}{"fistfuls":"$422"}{"fistfuls":"$236"}{"fistfuls":"$143"}{"fistfuls":"$96"}
 					//Cum on The Golden Egg
 $golden_egg == false;					
-if (($flock  -$fistfuls_of_cash) >  $bring_me_fistfuls)
+if (($flock - $fistfuls_of_cash) >  $bring_me_fistfuls)
 					{
 						$golden_egg = true;
-						print json_encode(array("fistfuls"=>"$" . round($bring_me_fistfuls/1000)));
+						print json_encode(array("fistfuls"=>"$" . round($bring_me_fistfuls - $fistfuls_of_cash)));
 						break;
 					}
 
@@ -421,7 +424,7 @@ if (($flock  -$fistfuls_of_cash) >  $bring_me_fistfuls)
 				//the blondes tell me what Love is
 				if($golden_egg == false)
 				{
-						print json_encode(array("fistfuls"=>"$" . round($flock/1000)));
+						print json_encode(array("fistfuls"=>"$" . round($flock)));
 				}
 					
 				
@@ -490,6 +493,8 @@ if (($flock  -$fistfuls_of_cash) >  $bring_me_fistfuls)
 	->limit(1)
 	->where('(pof_amount >= min_dollar AND (cash_buyer.create_user_id=:create_user_id OR portfolio.create_user_id=:create_user_id) AND (cash_buyer.status_id=:status_id OR portfolio.status_id=:status_id))', array(':create_user_id'=>Yii::app()->user->id,':status_id'=>1))
     ->queryAll();
+    
+Yii::app()->user->setFlash('success', "The Military: Urly Adopters - How To Build A Cash Buyers List - Cash Buyers List: ");
 		
 		$this->render('gold',array(
 			'affordability'=>$affordability,
@@ -634,7 +639,13 @@ if (($flock  -$fistfuls_of_cash) >  $bring_me_fistfuls)
 			$flock += $fistful_of_cash->charge;
 		}
 		
-		$fistfuls_of_cash = $count;
+				//OKBird				
+$criteria=New CDbCriteria;
+		$criteria->condition = 'status_id = 1';
+		//$criteria->condition = 'create_time >= 2018-11-19';
+		$criteria->order = 'create_time ASC';
+		$fistfuls_of_cash = count($matches=MatchTable::model()->findAll($criteria));
+		
 		$birds_of_a_feather = number_format($flock / $fistfuls_of_cash, 2,'.', ',');
 		
 		$OKBird = $birds_of_a_feather;
