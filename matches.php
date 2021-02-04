@@ -427,8 +427,28 @@ $buyers=count(Buyer::model()->findAll($criteria));
 		{
 			$birds_of_a_feather = 0.01;
 		}
+
+		//OKBird				
+$criteria=New CDbCriteria;
+		$criteria->condition = 'status_id = 1';
+		//$criteria->condition = 'create_time >= 2018-11-19';
+		$criteria->order = 'create_time ASC';
+		$fistfuls_of_cash = count($matches=MatchTable::model()->findAll($criteria));
+		
+//Cash
+		$charge = Charge::model()->findAll();
+		
+		$flock = 0;
+		foreach($charge as $fistful_of_cash)
+		{
+			$flock += $fistful_of_cash->charge;
+		}
+		
+//print number_format($flock, 0,'.', ',');
+		
+$birds_of_a_feather = number_format($flock / $fistfuls_of_cash, 7,'.', ',');
 			
-		echo "<a href='https://m.facebook.com'>$" . number_format($birds_of_a_feather, 7,'.', ',') ."</a></p>";
+		echo "<a href='https://facebook.com'>$" . number_format($birds_of_a_feather, 7,'.', ',') ."</a></p>";
 		
 		
 		echo "<p>";
@@ -603,10 +623,10 @@ $buyers=count(Buyer::model()->findAll($criteria));
 		$fistfuls_of_cash = $cash_gold_and_realestate;
 			
 		//fistfuls of cash * renturly
-		echo " $" . number_format($gold * $renturly, 0,'.', ',') . "</p>";
+		echo " $" . number_format($gold * $renturly * 1.37, 0,'.', ',') . "</p>";
 		
 $criteria=New CDbCriteria;
-$criteria->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)';
+$criteria->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)';
 //$criteria->condition = 'create_time >= 2018-11-19';
 //$criteria->condition = 'create_time > 2018-11-18';
 $criteria->order = 'create_time ASC';
@@ -942,7 +962,7 @@ if(($fistfuls/$renturly) <= 3)
         
         
 $criteria=New CDbCriteria;
-$criteria->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)';
+$criteria->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)';
 //$criteria->condition = 'create_time >= 2018-11-19';
 //$criteria->condition = 'create_time > 2018-11-18';
 $criteria->order = 'create_time ASC';
