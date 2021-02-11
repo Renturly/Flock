@@ -699,6 +699,10 @@ $buyers=Buyer::model()->findAll($criteria);
 a:active, a:hover {
 	color: gold;
 }
+
+.gold {
+	color: gold;
+}
 </style>
 
 <?php 		
@@ -718,8 +722,10 @@ $this->widget('ext.Hzl.google.HzlVisualizationChart', array('visualization' => '
                     )),
                // 'hAxis' => array('title' => 'Renturly'),
                 'curveType' => 'function', //smooth curve or not
-                'legend' => array('position' => 'bottom'),
+                //'legend' => array('position' => 'bottom'),
         )));
+        
+echo "<small><center><a class='renturly' href='http://www.accesstheflock.io/portfolio/create'>Renturly</a></center></small>";
         
         /*
          * Cash
@@ -961,6 +967,7 @@ if(($fistfuls/$renturly) <= 3)
         )));
         
         
+        
 $criteria=New CDbCriteria;
 $criteria->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)';
 //$criteria->condition = 'create_time >= 2018-11-19';
@@ -1027,8 +1034,9 @@ $this->widget('ext.Hzl.google.HzlVisualizationChart', array('visualization' => '
                     )),
                 //'hAxis' => array('title' => 'Fistfuls of Cash'),
                 'curveType' => 'function', //smooth curve or not
-                'legend' => array('position' => 'bottom'),
+                //'legend' => array('position' => 'bottom'),
         )));
+        echo "<small><center><a class='gold' href='http://www.accesstheflock.io/buyer/create'>Fistfuls of Cash</a></center></small>";
 
 ?>
 </div>
