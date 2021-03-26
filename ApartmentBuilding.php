@@ -131,8 +131,20 @@ function Renturly()
 
 document.getElementById("Renturly").disabled = false;
 
-document.getElementById("unit_type").submit();
+
+//document.getElementById("Renturly").value = "Submitted";
+
+//document.getElementById("unit_type").submit();
 	
+}
+
+document.getElementById("Renturly"). addEventListener("click", getLocationWhenSubmit);
+
+function getLocationWhenSubmit()
+{
+	
+document.getElementById("location").value = document.getElementById("location").value;
+	console.log(document.getElementById("location").value);
 }
 		document.getElementById("photo").onchange = handlePhotoChange;
 		
@@ -151,11 +163,12 @@ document.getElementById("bedrooms").onchange = handleBedroomsChange;
 		
 function handleBedroomsChange()
 	{
-		if(document.getElementById("bedrooms").value != "")
+		if(document.getElementById("bedrooms").value != "" && document.getElementById("bedrooms").value > 0 && !Number.isNaN(document.getElementById("bedrooms").value))
 		{
 			var bedrooms = true;
 			validated += 1;
 			console.log(bedrooms);
+			console.log(this.value);
 			document.getElementById("bedrooms").style.backgroundColor = "pink";
 		}
 		
@@ -164,7 +177,7 @@ document.getElementById("bathrooms").onchange = handleBathroomsChange;
 		
 function handleBathroomsChange()
 	{
-		if(document.getElementById("bathrooms").value != "")
+		if(document.getElementById("bathrooms").value != "" && document.getElementById("bathrooms").value > 0 && !Number.isNaN(document.getElementById("bathrooms").value))
 		{
 			var bathrooms = true;
 			validated += 1;
@@ -186,7 +199,8 @@ document.getElementById("unit_types").style.backgroundColor = "pink";
 		}
 		
 	}
-document.getElementById("location").onkeyup = handleLocation;
+
+document.getElementById("location").onchange = handleLocation;
 		
 function handleLocation()
 	{
@@ -194,6 +208,8 @@ function handleLocation()
 if(document.getElementById("location").value != "")
 		{
 		
+			
+			console.log(this.value);
 			
 			var location = true;
 			
@@ -332,17 +348,38 @@ function greaterThan()
 	return Fistfuls;
 }
 
-
 </script>
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRIDRKvp502hBlO21WqDfaPSL6gWEH-3U&libraries=places">
+
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC52smVFMzjARDZ4kq-b1nWl5oKZdHuGYk&libraries=places&callback=initMap">
 </script>
 <script>
-		//fixed javascript geocomplete()
-		const location = document.getElementById("location");
+//Inspect: https://developers.google.com/maps/documentation/places/web-service/autocomplete?hl=id
+
+
+function initMap()
+{
+		console.log("youtube");
 		
-		location.keyup = javascript;
-		function javascript()
-		{
-			location.geocomplete();
-		}
+		const center = { lat: 37.0902, lng: 95.7129 };
+// Create a bounding box with sides ~10km away from the center point
+const defaultBounds = {
+  north: center.lat + 0.1,
+  south: center.lat - 0.1,
+  east: center.lng + 0.1,
+  west: center.lng - 0.1,
+};
+const input = document.getElementById("location");
+const options = {
+  bounds: defaultBounds,
+  componentRestrictions: { country: ["us", "ca"] },
+  fields: ["address_components", "geometry", "icon", "name"],
+  origin: center,
+  strictBounds: false,
+  //types: ["establishment"],
+};
+		
+		const autocomplete = new google.maps.places.Autocomplete(input, options);
+		
+}
 </script>
