@@ -1,0 +1,18 @@
+<php
+	/*
+	<script src='http://maps.googleapis.com/maps/api/js?v=3&amp;libraries=places&key=AIzaSyC52smVFMzjARDZ4kq-b1nWl5oKZdHuGYk'></script>
+	*/ ?>
+	<?php 
+	<script type="text/javascript">
+	$("#Buyer_buyer_code").tooltip();
+	$( "body" ).on( "keyup", "input.location",  function(event, inputs) {
+		
+			$(this).geocomplete();
+
+			if($(this).attr('id').indexOf("WhereLooking") >= 0)
+			{
+				$(this).attr("required","required");
+			}
+	});
+	</script>
+	*/ ?
