@@ -57,7 +57,7 @@ class PortfolioController extends Controller
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update','dynamicprovince',
 						'dynamiccity','dynamicbuilding','countries',
-						'provinces','cities','admin','togglematch','search'),
+						'portfoliomatch','provinces','cities','admin','togglematch','search'),
 				'users'=>array('@'),
 			),
 			array('allow',  // allow test
@@ -147,6 +147,129 @@ class PortfolioController extends Controller
 	
 	/*
 	 * Bird Dog Matching Algorithm
+	 * Compression is Effective
+	 * Takes One Input from Portfolio 	
+	 * Create: Portfolio ID, which saves
+	 * on buyer.id AssetType
+	 * Pay Prostitutes returns with less 	 * Computations: OKBird
+	 */
+	public function actionPortfolioMatch($id) {	
+
+		//Sql Join - Asset Types
+		$motivated_seller = Portfolio::model()->findByPk($id);
+		
+		$building = $motivated_seller->asset_types[0];
+		
+
+		//https://www.yiiframework.com/doc/guide/1.1/en/database.query-builder
+		$buyers = Yii::app()->db->createCommand()
+    ->selectDistinct('cash_buyer.id as id, pof_amount, building_type, location, location.latitude as latitude, location.longitude as longitude, location.radius as radius, cash_buyer.create_user_id as create_user_id')
+    ->from('tbl_buyer cash_buyer')
+    ->where('cash_buyer.create_user_id != 92 && cash_buyer.create_user_id != 583 && cash_buyer.create_user_id != 1722')
+    ->join('tbl_where_looking location','location.id=cash_buyer.id')
+    ->join('tbl_types_looking building','location.id=cash_buyer.id')
+    ->limit(1858) //->limit(80)
+    ->order('cash_buyer.create_time desc')
+    ->queryAll();
+
+foreach ($buyers as $buyer) {
+
+	//$fistfuls_of_cash = array($buyer["building_type"] . " " . $building->asset_type);
+		
+	$ok = 0;
+	
+	
+	/*
+	*Cash Buyer has enough POF
+	*Keys: Match
+	*/
+	if ($buyer["pof_amount"] >= $motivated_seller->min_dollar) {
+		$ok += 1;
+		//array_push($fistfuls_of_cash, "This is affordability: " . $buyer["pof_amount"] . " " . $motivated_seller->min_dollar);
+	}
+	
+	if ($buyer["building_type"] == $building->asset_type) {
+		//It has to Match
+		$ok += 1;
+		//array_push($fistfuls_of_cash, "Building Types have to match: " . $buyer["building_type"] . " " . $building->asset_type);
+	}
+	
+//print $this::earth_distance($building->latitude, $building->longitude, $buyer["latitude"], $buyer["longitude"]);
+
+//print " ";
+
+//print $radius * 1609.34;
+	
+	if($this::earth_distance($building->latitude, $building->longitude, $buyer["latitude"], $buyer["longitude"]) < ($buyer["radius"] * 1609.34))
+		{
+			//$building->latitude, $building->longitude, $buyer["latitude"], $buyer["longitude"]
+			$ok += 1;
+			
+			//print $ok;
+			
+			//throw new Exception("Location Matches");
+		} //End location
+		
+		//You want fistfuls of cash in the Array
+		//print_r($fistfuls_of_cash);
+		//print($ok);
+		
+	//print $buyer["id"];
+		
+		try {
+		
+			$follow_up = false;
+
+			if ($ok == 3) {
+			
+				$follow_up = true;
+				
+//print "Match";
+//Yii::app()->end();
+		
+$match = new MatchTable;
+$match->buyer_id = $buyer["id"];
+$match->portfolio_id = $id;
+$match->path_to_buyer = $buyer["create_user_id"];
+$match->path_to_seller = $motivated_seller->create_user_id;
+$match->status_id = 1;
+						      		
+if($match->save(false)) {
+						      		
+Yii::app()->user->mp_track("Fistfuls of Cash");
+									Yii::app()->user->mp_increment("Fistfuls of Cash");
+									
+}
+									
+Yii::app()->user->setFlash('alert','Click Renturly before signing Renturly.com - Just email Chief Bird Dog michael.sadler@accesstheflock.io');
+
+		//Yii::app()->end();
+					
+$this->redirect(array('matchTable/search'));
+
+			} 
+		} catch(Exception $e) {
+		
+		//print $e->getMessage();
+		//Yii::app()->end();
+		
+	Yii::app()->user->setFlash('alert','Bring Chief Bird Dog michael.sadler@accesstheflock.io click Fistfuls of Cash or Renturly: use the Maps');
+					
+$this->redirect(array('matchTable/matches'));
+		} //catch
+		Yii::app()->user->setFlash('alert','Birds of a Feather Pay The Bird Dog Vetting Fee');
+	} //foreach 
+	
+		//print $match;
+		//Yii::app()->end();
+	if (!$follow_up) {
+$this->redirect(array('matchTable/matches'));
+	} 
+			
+} //end function PortfolioMatch
+	
+	/*
+	 * Bird Dog Matching Algorithm
 	 */
 	public function actionToggleMatch($id)
 	{	
@@ -186,21 +309,26 @@ class PortfolioController extends Controller
 	       
 			$fistfuls_of_cash = 0;
 	       
+			//It's not the time on my Device
 			$time = time(TRUE);
 	       
 			ini_set('max_execution_time', 7);
 			set_time_limit(7);
 			
+			$start = microtime(true);
+			$limit = 6;
+			
 	       	
 	       	$FistfulsofCash = array();
 
+	       //Matching
 		    if($portfolio->status_id == 1)
 		    {    
 		    	//New Algorithm
 		    	$limit = 0;
 		 
 		    	$criteria = new CDbCriteria;
-				$criteria->limit = 1090;
+				$criteria->limit = 80; //80;
 				//active
 				$criteria->order = "create_time desc";
 				
@@ -208,9 +336,13 @@ class PortfolioController extends Controller
 				
 $buyers=Yii::app()->cache->get($buyer);
 				
+				//Buyer is buying
 		    	foreach($buyers as $buyer)
 		    	{
 		    		//You can Access The Flock
+		    		if (microtime(true) - $start >= $limit) {
+		    		break;
+		    		}
 		    		
     				if($limit == 100)
 	    			{
@@ -244,7 +376,8 @@ $buyers=Yii::app()->cache->get($buyer);
 					    				$location_match = true;
 					    				
 								    	//Buyer and Seller Asset Types
-							    		foreach($buyer->types_looking as $types_looking)
+		
+	foreach($buyer->types_looking as $types_looking)
 							    		{
 							    			if($types_looking->building_type == $asset_type->asset_type)
 							    			{
@@ -252,6 +385,7 @@ $buyers=Yii::app()->cache->get($buyer);
 							    				$asset_type_match = true;
 							    			}
 							    		}
+							    		
 					    			} 
 					    		}
 				    		}
@@ -276,12 +410,19 @@ $buyers=Yii::app()->cache->get($buyer);
 				    				$match->status_id = 1;
 				    				
 		//Track Matches
+	
 					      		
 								
 									Yii::app()->user->mp_track("Fistfuls of Cash");
 									Yii::app()->user->mp_increment("Fistfuls of Cash");
 																
 				    				$match->update();
+				    				
+//You just need One: redirect here
+$this->redirect('/matchTable/search');
+
+break;
+
 				    			} else {
 				    				//save new match
 				    				$match = new MatchTable;
@@ -300,13 +441,16 @@ $buyers=Yii::app()->cache->get($buyer);
 																
 						      		$match->save(false);
 						      		
-									
-if($fistfuls_of_cash == 100)
-{
-									
-	$this->redirect('/matchTable/search');
+$this->redirect('/matchTable/search');
 
-}
+break;
+						      		
+									
+//if($fistfuls_of_cash == 100)
+//{
+									
+
+//}
 								
 									
 
@@ -607,114 +751,72 @@ $this->redirect(array('matchTable/search'));
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * I've got the portfolio controller on GitHub
 	 */
-	public function actionCreate()
-	{
-		//ini_set("memory_limit",-1);
-		//set_time_limit(7);
-		
+public function actionCreate()
+{
 		
 		$this->layout='//layouts/column1';
 		$portfolio=new Portfolio;
 
-		if(isset($_POST['Portfolio']) || isset($_POST['AssetType']))
-		{
-
-			//$property->images=CUploadedFile::getInstancesByName('images');
+if(isset($_POST['Portfolio']) || isset($_POST['AssetType']))
+	{
+			
+			try
+				{
 
 			$portfolio->attributes=$_POST['Portfolio'];
-			$valid=$portfolio->validate(false);
-			
-			if(isset($_POST['AssetType']))
-				{
-					$asset_types=array();
-					foreach($_POST['AssetType'] as $post)
-					{
-						$asset_type=new AssetType;
-						$asset_type->attributes=$post;
-						// Create geocoded address
-						if(isset($post['location']))
-						{
+			$portfolio->validate(false);
+	
+if($portfolio->save(false))
+{
 
-							//echo "sssss"; exit;
-							//$asset_type->location = $post['location'];
-							
+		foreach($_POST['AssetType'] as $portfolio_of_assets)
+		{
+				$asset_type = new AssetType;
+						
+				$asset_type->attributes = $portfolio_of_assets;
+				
+				$asset_type->portfolio_id = $portfolio->id;
 
-	            			$latlong = $this->get_lat_long2($asset_type->location);
-	            			//print_r($latlong); exit;
+	          $latlong = $this->get_lat_long2($asset_type->location);
+	
 							$asset_type->latitude = $latlong['lat'];
 							$asset_type->longitude = $latlong['lon'];
 
-							
-						}
-
-						$valid=$asset_type->validate(false) && $valid;
-						array_push($asset_types,$asset_type);
-					}
-					$portfolio->asset_types=$asset_types;
-				}
-			
-			if($valid)
-			{
-				try
-				{
-					$transaction=$portfolio->dbConnection->beginTransaction();
-					
-					$portfolio->status_id = 2;
-					
-					if($portfolio->save(false))
-					{
-						foreach($portfolio->asset_types as $asset_type)
-						{
-							$asset_type->portfolio_id=$portfolio->id;
 							$asset_type->save(false);
-						}
+						
+		}			
 
-						//Yii::app()->user->setFlash('success',"The portfolio has been saved!");
-						Yii::log('added_portfolio', 'info', 'Portfolio.add');
-						$this->notificationBuyerPortfolioMatch($portfolio);
+Yii::app()->user->setFlash('success',"The portfolio has been saved: Now you can bring me a Fistfuls of Cash");
+
+} //save(false)					
+
+		//https://www.yiiframework.com/doc/guide/1.1/en/database.query-builder
+		$motivated_seller = Yii::app()->db->createCommand()
+    ->select('id')
+    ->from('tbl_portfolio')
+    ->limit(1)
+    ->order('create_time desc')
+    ->queryRow();
+    
+
+$this->redirect("https://www.accesstheflock.io/portfolio/PortfolioMatch/" . $motivated_seller["id"]);
 				
-						
-						
-						
-						$transaction->commit();
-						
-						$this->actionToggleMatch($portfolio->id);
-						
-						$this->redirect(Yii::app()->createUrl('/matchTable/search'));
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						//$this->redirect(Yii::app()->createUrl('/portfolio/admin'));
-						
-						
+				} catch(Exception $e) {
+					Yii::app()->user->setFlash('alert',"I'm working on portfolio/PortfolioMatch Ok");
+					print $e->getMessage();
+					//$transaction->rollback();
+				} //end try
 
-
-						
-					}
-				
-				}
-				catch(Exception $e) // an exception is raised if a query fails
-				{
-					Yii::app()->user->setFlash('alert','Most likely... You need to delete any "Asset Types" rows at the bottom by clicking the "X" at the bottom-right.');
-					$transaction->rollback();
-				}
-			}
-
-		}
+		} //if POST
 			
 		
 		$this->render('create', array(
 				'portfolio'=>$portfolio,
 		));
 
-	}
+} // function Create
 
 	
 /* Moved to SellersDocuments Controller
@@ -947,6 +1049,15 @@ $this->redirect(array('matchTable/search'));
 	}
 	
 //Portfolio Asset Type Limit is he List
+/*AssetType
+*
+*
+*
+*
+*
+*
+*
+*/
 	public function actionAssetType($id = 0)
 	{
 		//For sellers list
@@ -954,8 +1065,9 @@ $this->redirect(array('matchTable/search'));
 		{
 			$criteria = new CDbCriteria;
 			//actives
+			$criteria->condition = "create_user_id != 92";
 			$criteria->order = "create_time desc";
-			$criteria->limit = 826;//746;
+			$criteria->limit = 200;//746;
 			$asset_types = AssetType::model()->findAll($criteria);
 		
 			$assetTypes = array();
