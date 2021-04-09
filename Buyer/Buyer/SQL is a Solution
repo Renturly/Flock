@@ -1,0 +1,9 @@
+$sql = Yii::app()->db->createCommand()
+    ->selectDistinct('cash_buyer.id as id, pof_amount, building_type, location, location.latitude as latitude, location.longitude as longitude, location.radius as radius, cash_buyer.create_user_id as create_user_id')
+    ->from('tbl_buyer cash_buyer')
+    ->where('cash_buyer.create_user_id != 92 && cash_buyer.create_user_id != 583 && cash_buyer.create_user_id != 1722')
+    ->join('tbl_where_looking location','location.id=cash_buyer.id')
+    ->join('tbl_types_looking building','location.id=cash_buyer.id')
+    ->limit(1858) //->limit(80)
+    ->order('cash_buyer.create_time desc')
+    ->queryAll();
