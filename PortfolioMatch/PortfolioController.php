@@ -241,13 +241,13 @@ if($match->save(false)) {
 Yii::app()->user->mp_track("Fistfuls of Cash");
 									Yii::app()->user->mp_increment("Fistfuls of Cash");
 									
-}
-									
 Yii::app()->user->setFlash('alert','Click Renturly before signing Renturly.com - Just email Chief Bird Dog michael.sadler@accesstheflock.io');
 
-		//Yii::app()->end();
-					
-$this->redirect(array('matchTable/search'));
+$this->redirect('https://www.accesstheflock.io/birds-of-a-feather');
+
+}
+									
+	//Yii::app()->end();
 
 				} 
 			}
@@ -258,7 +258,7 @@ $this->redirect(array('matchTable/search'));
 		
 	Yii::app()->user->setFlash('alert','Bring Chief Bird Dog michael.sadler@accesstheflock.io click Fistfuls of Cash or Renturly: use the Maps');
 					
-$this->redirect(array('matchTable/matches'));
+$this->redirect('https://www.accesstheflock.io/matches');
 		} //catch
 		Yii::app()->user->setFlash('alert','Birds of a Feather Pay The Bird Dog Vetting Fee');
 	} //foreach 
@@ -266,7 +266,7 @@ $this->redirect(array('matchTable/matches'));
 		//print $match;
 		//Yii::app()->end();
 	if (!$follow_up) {
-$this->redirect(array('matchTable/matches'));
+$this->redirect('https://www.accesstheflock.io/matches');
 	} 
 			
 } //end function PortfolioMatch
