@@ -163,11 +163,11 @@ class PortfolioController extends Controller
 
 		//https://www.yiiframework.com/doc/guide/1.1/en/database.query-builder
 		$buyers = Yii::app()->db->createCommand()
-    ->selectDistinct('cash_buyer.id as id, pof_amount, building_type, location, location.latitude as latitude, location.longitude as longitude, location.radius as radius, cash_buyer.create_user_id as create_user_id')
+    ->selectDistinct('cash_buyer.id as id, pof_amount, status_id, building_type, location, location.latitude as latitude, location.longitude as longitude, location.radius as radius, cash_buyer.create_user_id as create_user_id')
     ->from('tbl_buyer cash_buyer')
     ->where('cash_buyer.create_user_id != 92 && cash_buyer.create_user_id != 583 && cash_buyer.create_user_id != 1722')
     ->join('tbl_where_looking location','location.id=cash_buyer.id')
-    ->join('tbl_types_looking building','location.id=cash_buyer.id')
+    ->join('tbl_types_looking building','building.id=cash_buyer.id')
     ->limit(1858) //->limit(80)
     ->order('cash_buyer.create_time desc')
     ->queryAll();
@@ -183,7 +183,7 @@ foreach ($buyers as $buyer) {
 	*Cash Buyer has enough POF
 	*Keys: Match
 	*/
-	if ($buyer["pof_amount"] >= $motivated_seller->min_dollar) {
+	if ($buyer["status_id"] != 2 && $buyer["pof_amount"] >= $motivated_seller->min_dollar) {
 		$ok += 1;
 		//array_push($fistfuls_of_cash, "This is affordability: " . $buyer["pof_amount"] . " " . $motivated_seller->min_dollar);
 	}
@@ -216,7 +216,7 @@ foreach ($buyers as $buyer) {
 		
 	//print $buyer["id"];
 		
-		try {
+		//try {
 		
 			$follow_up = false;
 
@@ -227,6 +227,12 @@ foreach ($buyers as $buyer) {
 //print "Match";
 //Yii::app()->end();
 		
+				$matches = 0;
+
+				if (Users::model()->findByPk($buyer["create_user_id"])->getVoteSum() >= 0 && Users::model()->findByPk($motivated_seller->create_user_id)->getVoteSum() >= 0) {
+		
+	
+		
 $match = new MatchTable;
 $match->buyer_id = $buyer["id"];
 $match->portfolio_id = $id;
@@ -235,35 +241,37 @@ $match->path_to_seller = $motivated_seller->create_user_id;
 $match->status_id = 1;
 						      		
 if($match->save(false)) {
+
 						      		
 Yii::app()->user->mp_track("Fistfuls of Cash");
 									Yii::app()->user->mp_increment("Fistfuls of Cash");
 									
-}
-									
 Yii::app()->user->setFlash('alert','Click Renturly before signing Renturly.com - Just email Chief Bird Dog michael.sadler@accesstheflock.io');
 
-		//Yii::app()->end();
-					
-$this->redirect(array('matchTable/search'));
+$this->redirect('https://www.accesstheflock.io/birds-of-a-feather');
 
-			} 
-		} catch(Exception $e) {
+}
+									
+	//Yii::app()->end();
+
+				} 
+			}
+		//} catch(Exception $e) {
 		
 		//print $e->getMessage();
 		//Yii::app()->end();
 		
-	Yii::app()->user->setFlash('alert','Bring Chief Bird Dog michael.sadler@accesstheflock.io click Fistfuls of Cash or Renturly: use the Maps');
+	//Yii::app()->user->setFlash('alert','Bring Chief Bird Dog michael.sadler@accesstheflock.io click Fistfuls of Cash or Renturly: use the Maps');
 					
-$this->redirect(array('matchTable/matches'));
-		} //catch
+//$this->redirect('https://www.accesstheflock.io/matches');
+		/} //catch
 		Yii::app()->user->setFlash('alert','Birds of a Feather Pay The Bird Dog Vetting Fee');
 	} //foreach 
 	
 		//print $match;
 		//Yii::app()->end();
 	if (!$follow_up) {
-$this->redirect(array('matchTable/matches'));
+$this->redirect('https://www.accesstheflock.io/matches');
 	} 
 			
 } //end function PortfolioMatch
@@ -766,6 +774,7 @@ if(isset($_POST['Portfolio']) || isset($_POST['AssetType']))
 				{
 
 			$portfolio->attributes=$_POST['Portfolio'];
+			$portfolio->status_id = 1;
 			$portfolio->validate(false);
 	
 if($portfolio->save(false))
@@ -1050,7 +1059,7 @@ $this->redirect("https://www.accesstheflock.io/portfolio/PortfolioMatch/" . $mot
 	
 //Portfolio Asset Type Limit is he List
 /*AssetType
-*
+*Tire Kickers are 120 Motivated Sellers
 *
 *
 *
@@ -1075,7 +1084,7 @@ $this->redirect("https://www.accesstheflock.io/portfolio/PortfolioMatch/" . $mot
 			{
 				$building_type = BuildingType::model()->findByPk($asset_type->asset_type);
 				$portfolio = Portfolio::model()->findByPk($asset_type->portfolio_id);
-				if ($portfolio->status_id == 1 && Users::model()->findByPk($portfolio->create_user_id)->getVoteSum() > 0 && $portfolio->create_user_id != 92 && $portfolio->create_user_id != 583)
+				if ($portfolio->status_id == 1 && Users::model()->findByPk($portfolio->create_user_id)->getVoteSum() > 0 && $portfolio->create_user_id != 92 && $portfolio->create_user_id != 583 && $portfolio->create_user_id != 1722)
 				if(true)
 				{
 					array_push($assetTypes,array(
