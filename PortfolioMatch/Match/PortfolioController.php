@@ -253,7 +253,7 @@ $this->redirect('https://www.accesstheflock.io/birds-of-a-feather');
 }
 									
 	//Yii::app()->end();
-
+		$this->redirect('https://www.accesstheflock.io/birds-of-a-feather');
 				} 
 			} // end ok
 		//} catch(Exception $e) {
