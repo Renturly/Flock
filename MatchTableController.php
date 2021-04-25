@@ -37,7 +37,7 @@ class MatchTableController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('matches','doggingfistfuls','bringmerenturly','paythebirddog','birddog','vettingfee','view'),
+				'actions'=>array('matches','deal','doggingfistfuls','bringmerenturly','paythebirddog','birddog','vettingfee','view'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -148,7 +148,7 @@ class MatchTableController extends Controller
 	//HTTPS
 	//Flock Pricing is for Usability
 	//echoes json
-	public function actionBringMeRenturly()
+	public function actionDeal()
 	{
 	
 		header('Content-Type: application/json');
@@ -194,7 +194,132 @@ foreach($data as $pay)
     	
 		//p-value
     	$result->cor;
-print json_encode(array("flock_pricing"=>"$" . round($result->y, 2))); //Wire Transfer: Float
+print json_encode(array("flock_pricing"=>"$" . round($result->y, 0))); //Wire Transfer: Float
+		die();
+   
+		} catch (Exception $e) {
+  			
+			echo 'Message: ' . $e->getMessage();
+			
+		}
+		
+		//Pay The Bird Dog
+		/*
+		header('Content-Type: application/json');
+		
+		//buyer_id and portfolio_id
+		//update status
+		$cash_buyers_list = Yii::app()->db->createCommand()
+    ->select('buyer_id, portfolio_id')
+    ->from('tbl_match fistfuls_of_cash')
+	->limit(1)
+	->where('status_id = :status_id AND create_user_id = :create_user_id', array(':create_user_id'=>Yii::app()->user->id,':status_id'=>1))
+    ->queryRow();
+
+    //Linear Regression
+$data = [[1,20],[2,70],[2,45],[3,81],[5,73],[6,80],[7,110]];
+$x = 4.5;
+
+
+
+//What is the expected y value for a given x value?
+try {
+		//Use  composer autoload in vendors
+		$prediction = new PredictionBuilder($x, $data);
+    $result = $prediction->build(); // y = 76.65
+} catch (\Exception $e) {
+    echo $e->getMessage(), "\n";
+}
+
+		//Gradient Descent Recommend Fistfuls of Cash with Minimum Loss
+	
+		print json_encode(array("buyer_id"=>$cash_buyers_list['buyer_id'],"portfolio_id"=>$result));
+		//Vote
+		die();
+		*/
+
+	}
+	
+	//HTTPS
+	//Flock Pricing is for Usability
+	//echoes json
+	public function actionBringMeRenturly()
+	{
+	
+		header('Content-Type: application/json');
+		//Title & Escrow
+		//autoload.php
+		try {
+			
+			//test code
+			//Loads Composer
+			//I need composer.json for more complicated Files
+			require_once(dirname(__DIR__) . "/vendors/prediction-builder/src/PredictionBuilder.php");
+			//'/vendor/autoload.php');
+			//I can get my Data Science Certificate: I can get Composer autoload.php to work
+			//Linear Regression: Spend Credit on Making Money
+//$data = [[1,20],[2,70],[2,45],[3,81],[5,73],[6,80],[7,110]];
+
+		$criteria=new CDbCriteria;
+		$criteria->addCondition('create_time >= :create_time');
+$criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-1 year'));
+		$criteria->order = "create_time desc";
+
+$data = Yii::app()->db->createCommand()
+    ->select('charge')
+    ->from('tbl_flock')
+    ->queryAll($criteria);
+    
+$charges = Charge::model()->findAll();
+		
+		foreach($charges as $charge)
+		{
+			$inflation += $charge->charge;
+		}
+		
+		$flock = floor(round(($flock * $inflation) - $inflation, 0));
+		
+		//Begin Birds of a Feather
+		$charge = Charge::model()->findAll();
+		
+		$flock = 0;
+		foreach($charge as $fistful_of_cash)
+		{
+			$flock += $fistful_of_cash->charge;
+		}
+		
+				//OKBird				
+$criteria=New CDbCriteria;
+		$criteria->condition = 'status_id = 1';
+		//$criteria->condition = 'create_time >= 2018-11-19';
+		$criteria->order = 'create_time ASC';
+		$fistfuls_of_cash = count($matches=MatchTable::model()->findAll($criteria));
+		
+		$birds_of_a_feather = number_format($flock / $fistfuls_of_cash, 2,'.', ',');
+		
+		$OKBird = $birds_of_a_feather;
+
+$flock = array();
+$pay_the_bird_dog = 0;
+foreach($data as $pay)
+{
+	$pay_the_bird_dog += 1;
+	array_push($flock, array($pay_the_bird_dog, $pay[charge]));
+	
+
+}
+		//What I Got $0.15
+		$x = 0.15;
+
+		$prediction = new PredictionBuilder($x, $flock);
+		//Bring a Smile to the Bank
+    	$result = $prediction->build();
+    	
+		//p-value
+    	$result->cor;
+//print json_encode(array("flock_pricing"=> "$" . ($OKBird + $OKBird * round($result->cor, 2)))); //Wire Transfer: Float
+	print json_encode(array("flock_pricing"=> "$" . $OKBird * -round($result->cor, 2)));
+
 		die();
    
 		} catch (Exception $e) {
@@ -379,7 +504,7 @@ $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-3 month'));
 		
 		//sorted Trillionaire to Minimum Purchase Price
 		//print_r($cash_buyers_list);
-		$flock = 101000;
+		$flock = 8000000;//101000;
 		$right = max($cash_buyers_list);
 		$left = min($cash_buyers_list);
 		
@@ -415,7 +540,7 @@ $golden_egg == false;
 if (($flock - $fistfuls_of_cash) >  $bring_me_fistfuls)
 					{
 						$golden_egg = true;
-						print json_encode(array("fistfuls"=>"$" . round($bring_me_fistfuls - $fistfuls_of_cash)));
+						print json_encode(array("fistfuls"=>"$" . number_format(round($bring_me_fistfuls - $fistfuls_of_cash), 0, '.', ',')));
 						break;
 					}
 
@@ -457,6 +582,8 @@ if (($flock - $fistfuls_of_cash) >  $bring_me_fistfuls)
 	public function actionBirdDog()
 	{
 	
+		for ($ok = 0; $ok <= 15; $ok++) {
+
 		$criteria=new CDbCriteria;
 		$criteria->condition= "status_id = 1";
 		$criteria->limit = 1;
@@ -466,6 +593,8 @@ if (($flock - $fistfuls_of_cash) >  $bring_me_fistfuls)
 		$match->create_time = date("y:F:d",strtotime("-3 Months"));
 		
 		$match->update();
+		
+		} //End for
 		
 		Yii::app()->user->setFlash('success', "You will Follow-Up in 3 Months.");
 		
@@ -520,13 +649,13 @@ Yii::app()->user->setFlash('success', "The Military: Urly Adopters - How To Buil
 		if(Yii::app()->user->id == 92)
 		{
 			$criteria=New CDbCriteria;
-			$criteria->condition= "status_id != 2 AND score >= 0";
+			$criteria->condition= "status_id != 2";
 			$criteria->order = 'update_time DESC, score DESC';
 			$criteria->limit = 1;
 			$model=MatchTable::model()->findAll($criteria);
 		} else {
 			$criteria=New CDbCriteria;
-			$criteria->condition="(path_to_seller = $user_id OR path_to_buyer = $user_id) AND status_id != 2 AND score >= 0";
+			$criteria->condition="(path_to_seller = $user_id OR path_to_buyer = $user_id) AND status_id != 2";
 			$criteria->order = 'update_time DESC, score DESC';
 			$criteria->limit = 1;
 			$model=MatchTable::model()->findAll($criteria);
