@@ -1,0 +1,7 @@
+<?php
+$criteria = new CDbCriteria;
+$criteria->limit = 1;
+$criteria->order = "create_time desc";
+
+$string = Object::model()->find($criteria);
+?>
