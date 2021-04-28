@@ -528,6 +528,7 @@ $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-3 month'));
 		
 		//fistfuls_of_cash are Credit
 		$criteria=new CDbCriteria;
+		//Tire Kicker
 		$criteria->condition= "status_id != 2 AND score >= 0";
 			$fistfuls_of_cash = count(MatchTable::model()->findAll($criteria));
 
