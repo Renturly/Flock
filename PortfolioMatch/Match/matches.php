@@ -711,7 +711,7 @@ a:active, a:hover {
 
 $gold = $count;
 
-$cum = $gold * $flock;
+$cum = $gold * $flock; //:..sex sells
 
 
 		
