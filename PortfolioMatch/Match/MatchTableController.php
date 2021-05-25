@@ -173,16 +173,19 @@ $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-1 year'));
 $data = Yii::app()->db->createCommand()
     ->select('charge')
     ->from('tbl_flock')
+    ->limit(30)
     ->queryAll($criteria);
     
 
 $flock = array();
 $pay_the_bird_dog = 0;
+$CLT = 0;
 foreach($data as $pay)
 {
 	$pay_the_bird_dog += 1;
 	array_push($flock, array($pay_the_bird_dog, $pay[charge]));
 	
+	$CLT += $pay[charge];
 
 }
 		//What I Got $0.15
@@ -194,7 +197,7 @@ foreach($data as $pay)
     	
 		//p-value
     	$result->cor;
-print json_encode(array("flock_pricing"=>"$" . round($result->y, 0))); //Wire Transfer: Float
+print json_encode(array("flock_pricing"=>"$" . round(142.41015+6.78859*$CLT, 0))); //Wire Transfer: Float
 		die();
    
 		} catch (Exception $e) {
@@ -390,23 +393,46 @@ try {
 $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-1 year'));
 		$criteria->order = "create_time desc";
 
+	/*
 $data = Yii::app()->db->createCommand()
     ->select('charge')
     ->from('tbl_flock')
+    ->queryAll($criteria);
+    */
+    
+$data = Yii::app()->db->createCommand()
+    ->select('charge')
+    ->from('tbl_flock')
+    ->limit(30)
     ->queryAll($criteria);
     
 
 $flock = array();
 $pay_the_bird_dog = 0;
+$renturly = 0;
 foreach($data as $pay)
 {
 	$pay_the_bird_dog += 1;
 	array_push($flock, array($pay_the_bird_dog, $pay[charge]));
 	
+	$renturly += $pay[charge];
 
 }
 		//What I Got $0.15
-		$x = 0.15;
+		//$x = 0.15;
+		//$x = 0.15;
+		
+//OKBird				
+		$criteria=New CDbCriteria;
+		$criteria->condition = 'status_id = 1';
+		$criteria->order = 'create_time ASC';
+		$fistfuls_of_cash = count(MatchTable::model()->findAll($criteria));
+		
+		$x = $renturly / $fistfuls_of_cash;
+		
+		print "$" . round($renturly, 2) . " Renturly ";
+		print $fistfuls_of_cash . " Fistfuls of Cash ";
+		print "$" . round($x, 7) . " Sample ";
 
 		$prediction = new PredictionBuilder($x, $flock);
 		//Bring a Smile to the Bank
@@ -414,7 +440,7 @@ foreach($data as $pay)
     	
 
     	//p-value < 0.05: Common Sense
-print json_encode(array("No Tire Kickers"=>$result->ln_model)); //Wire Transfer: Float
+print json_encode(array("AfterShip"=>$result->ln_model)); //Wire Transfer: Float
 		die();
    
 		} catch (Exception $e) {
@@ -528,7 +554,6 @@ $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-3 month'));
 		
 		//fistfuls_of_cash are Credit
 		$criteria=new CDbCriteria;
-		//Tire Kicker
 		$criteria->condition= "status_id != 2 AND score >= 0";
 			$fistfuls_of_cash = count(MatchTable::model()->findAll($criteria));
 
