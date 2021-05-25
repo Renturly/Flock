@@ -86,6 +86,7 @@ $this->pageTitle = "Bird Cage";
 		//A day lower than a month increases Bird Dogging Urly Birds
 		$now->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)';
 		
+		//slider
 		$matches = 1;
 		foreach(MatchTable::model()->findAllByAttributes(array('status_id'=>1), $now) as $match)
 		{
@@ -709,6 +710,10 @@ a:active, a:hover {
 
 
 $gold = $count;
+
+$cum = $gold * $flock;
+
+
 		
 $this->widget('ext.Hzl.google.HzlVisualizationChart', array('visualization' => 'LineChart',
             'data' => $data,
@@ -790,9 +795,10 @@ Yii::app()->user->mp_increment("Fistfuls");
 
 
 		$criteria=New CDbCriteria;
-		//$criteria->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH)';
-		$criteria->condition = 'create_time >= 2018-11-19';
-		$criteria->order = 'create_time ASC';
+		$criteria->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 9 MONTH)';
+		//$criteria->condition = 'create_time >= 2021-01-01';
+		$criteria->order = 'create_time DESC';
+		$criteria->limit = $cum * 30;
 		//$matches=MatchTable::model()->findAll($criteria);
 		$matches=Charge::model()->findAll($criteria);
 
