@@ -1,5 +1,5 @@
 # Flock
-Pay The Bird Dog
+Pay The Bird Dog $131 is a Startup: iOS App
 
 <?php
 
