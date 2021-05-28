@@ -1,5 +1,5 @@
 # Flock
-Pay The Bird Dog $131 is a Startup: iOS App
+Pay The Bird Dog $131 a Month is a Startup: iOS App
 
 <?php
 
