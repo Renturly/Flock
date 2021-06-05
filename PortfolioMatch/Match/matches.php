@@ -19,6 +19,19 @@
  
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script> 
+
+<script>
+const flockPricing = async () => {
+
+	const trillionaire = await fetch("https://www.accesstheflock.io/matchTable/Deal");
+    
+	const doggingFistfulsJSON = await trillionaire.json();
+	
+	console.log(doggingFistfulsJSON.flock_pricing);
+	document.getElementById('renturly').innerHTML = doggingFistfulsJSON.flock_pricing;
+	
+}
+</script>
 <?php
 
 $this->pageTitle = "Bird Cage";
@@ -235,8 +248,21 @@ $buyers=count(Buyer::model()->findAll($criteria));
 			
 
 		}
+		
+//echo Deal
 
-		echo " $" . number_format($fistfuls, 0,'.', ',') . "</p>";
+		//Cash
+		$charge = Charge::model()->findAll();
+		
+		$flock = 0;
+		foreach($charge as $fistful_of_cash)
+		{
+			$flock += $fistful_of_cash->charge;
+		}
+
+		echo "<span> </span>$" . round((142.41015+6.78859*$flock)/1000, 0) . "K</p>";
+		
+//End Deal
 		
 		$cash_gold_and_realestate = $fistfuls_of_cash;
 		
