@@ -1,7 +1,8 @@
-<?php /*
-*	$_POST log(1) REQUEST
-*	Secure Routes
-*	Limit size of Logic
+<?php /* 
+*	Write the code with securing the  views for Error Handling: console.log(): limit size of process: $_POST log(1) REQUEST
+*	<?php $this->renderPartial('/matchTable/birddogging'); 
+?>
+*	The view appears in for error handling and https: They can use it
 */
 ?>
 
