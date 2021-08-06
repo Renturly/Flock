@@ -529,7 +529,7 @@ a:active, a:hover {
 <?php if(!Yii::app()->user->isCustomer() && Yii::app()->user->countmatches > 0): ?>
 <div class="span12">
 
-<center><h1>$<?php echo $flock; ?> Monthly Flock</h1></center>
+<center><h1>$<?php echo round($flock, 2); ?> Monthly Flock</h1></center>
     	
 <div>
 
@@ -797,7 +797,7 @@ mixpanel.identify("<?php echo Yii::app()->user->email; ?>");
 
   <tr><td><span class="pull-right"></span></td><td> <b> 
   
-  <input type="hidden" name="flock" value="<?php echo $flock; ?>"> 	
+  <input type="hidden" name="flock" value="<?php echo round($flock, 2); ?>"> 	
 <?php
 	//echo CHtml::submitButton("Subscribe Buyers To Vetted Sellers", array('class'=>'btn btn-warning', 'id'=>'payment-button'));
 	//echo CHtml::submitButton("$1 Monthly Cash Flow", array('class'=>'btn btn-warning', 'id'=>'payment-button'));
