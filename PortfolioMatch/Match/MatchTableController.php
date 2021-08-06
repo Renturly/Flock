@@ -37,7 +37,7 @@ class MatchTableController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('matches','deal','doggingfistfuls','bringmerenturly','paythebirddog','birddog','vettingfee','view'),
+				'actions'=>array('matches','birddogging','deal','doggingfistfuls','bringmerenturly','paythebirddog','birddog','vettingfee','view'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -70,6 +70,41 @@ class MatchTableController extends Controller
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
+	}
+
+	public function actionBirdDogging()
+	{
+		if(isset($_POST))
+		{
+			//print_r($_POST);
+			include __DIR__ . "/../modules/blog/models/Content.php";
+			
+			$model=new Content;
+			
+			$model->content = $_POST["content"];
+			
+         $model->title = $_POST["title"];
+         
+			$model->description = $_POST["description"];
+			
+			$model->h1 = $_POST["h1"];
+			
+			$model->user_id = 92;
+			$model->author = '';
+
+			
+			if($model->save())
+			{
+				
+				Yii::app()->user->mp_track("Pay The Bird Dog");
+				Yii::app()->user->mp_increment("Pay The Bird Dog");
+				
+			$this->redirect("https://www.accesstheflock.io/the-urly-bird");
+				
+			}	
+		}
+
+		$this->render('birddogging1');
 	}
 
 	public function actionMatches()
@@ -169,11 +204,22 @@ class MatchTableController extends Controller
 		$criteria->addCondition('create_time >= :create_time');
 $criteria->params[':create_time'] = date('Y-m-d h:i:s', strtotime('-1 year'));
 		$criteria->order = "create_time desc";
+		
+	//Flock controls Wire Transfer
+	$now = new CDbCriteria;
+	$now->condition = 'create_time >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)';
+		$charge = Charge::model()->findAll($now);
+		
+		$gold = 0;
+		foreach($charge as $fistful_of_cash)
+		{
+			$gold += $fistful_of_cash->charge;
+		}
 
 $data = Yii::app()->db->createCommand()
     ->select('charge')
     ->from('tbl_flock')
-    ->limit(30)
+    ->limit($gold)
     ->queryAll($criteria);
     
 
@@ -431,8 +477,8 @@ foreach($data as $pay)
 		$x = $renturly / $fistfuls_of_cash;
 		
 		print "$" . round($renturly, 2) . " Renturly ";
-		print $fistfuls_of_cash . " Fistfuls of Cash ";
-		print "$" . round($x, 7) . " Sample ";
+		print $fistfuls_of_cash/6 . " Fistfuls of Cash ";
+		print "$" . round($x, 7) . " OKBird ";
 
 		$prediction = new PredictionBuilder($x, $flock);
 		//Bring a Smile to the Bank
@@ -440,7 +486,7 @@ foreach($data as $pay)
     	
 
     	//p-value < 0.05: Common Sense
-print json_encode(array("AfterShip"=>$result->ln_model)); //Wire Transfer: Float
+print json_encode(array("Fistfuls of Cash are Renturly"=>$result->ln_model)); //Wire Transfer: Float
 		die();
    
 		} catch (Exception $e) {
@@ -801,7 +847,7 @@ $criteria=New CDbCriteria;
 		$criteria->order = 'create_time ASC';
 		$fistfuls_of_cash = count($matches=MatchTable::model()->findAll($criteria));
 		
-		$birds_of_a_feather = number_format($flock / $fistfuls_of_cash, 2,'.', ',');
+		$birds_of_a_feather = number_format($flock / $fistfuls_of_cash, 7,'.', ',');
 		
 		$OKBird = $birds_of_a_feather;
 		
