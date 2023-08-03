@@ -20,7 +20,7 @@ Yii::app()->clientScript->registerMetaTag(
 
 <div class="row-fluid">
 
-	<a style="text-align: center;" href="https://www.accesstheflock.io/birddogging" class="btn btn-warning">Blogging</a>
+	<a style="text-align: center;" href="https://www.accesstheflock.io/buy-apartment-buildings" class="btn btn-warning">Dogging</a>
 	
 	<br><br>
 	<?php $limit = rand(1,4500); ?>
@@ -29,26 +29,44 @@ Yii::app()->clientScript->registerMetaTag(
 </div>
 
 <div class="well">
-<?php $limit = rand(1,1500); ?>
-<p><a class='btn btn-info' 'id'='payment-button' href="https://www.accesstheflock.io/buyer/<?php echo $limit; ?>">Request Money</a></p>
+<?php 
+/*
+$criteria = new CDbCriteria;
+$criteria->condition = "create_user_id != 92";
+$criteria->limit = 5;
+$criteria->order = "rand()";
 
 
-<p><a href="https://www.accesstheflock.io/the-urly-bird">Attract Bird Dogs to the Flock.</a></p>
+$principal = Buyer::model()->findAll($criteria);
+*/
+?>
+<p><a class='btn btn-info' 'id'='payment-button' href='https://www.accesstheflock.io/buyer/<?php echo $principal[0]->id; ?>'>Request Money</a></p>
+
+
+<h3><a href="https://www.accesstheflock.io/the-urly-bird">Attract Bird Dogs to the Flock</a></h3>
 
 
 <?php 
 //This integration test is an information oilfield
 //$portfolio = Portfolio::find()->limit(1);
 //print_r($portfolio);
-$portfolio = User::model()->findByPk($limit);
+//$portfolio = User::model()->findByPk($limit);
 
+//buyer
 $criteria = new CDbCriteria;
+$criteria->condition = "create_user_id != 92";
+$criteria->limit = 1;
+//$criteria->order = "rand()";
 
+
+
+
+
+
+//marketplace
+$criteria = new CDbCriteria;
 $criteria->limit = 1;
 $criteria->order = "create_time desc";
-
-
-$buyer = Match::model()->findAll($criteria);
 
 $communication = Property::model()->findAll($criteria);
 
@@ -56,20 +74,32 @@ $communication = Property::model()->findAll($criteria);
 
 //echo $buyer[0]->buyer_id;
 
+$criteria = new CDbCriteria;
+$criteria->limit = 1;
+$criteria->order = "create_time desc";
 
+$match = Match::model()->findAll($criteria);
 ?>
 
 
 
-<p><a href="https://www.accesstheflock.io/buyer/<?php echo $buyer[0]->buyer_id; ?>">Offer property to the most recent match.</a></p>
+<p><a href="https://www.accesstheflock.io/portfolio/<?php echo $match[0]->portfolio_id; ?>">Make a cash offer at this address.</a></p>
 
-<p><a href="https://www.accesstheflock.io/marketplace/<?php echo $communication[0]->id; ?>">Price for the Flock is minimum purchase price.</a></p>
 
+
+<p><a href="https://www.accesstheflock.io/marketplace/<?php echo $communication[0]->id; ?>">Price for the Flock is market price.</a></p>
+
+<h3><a style="color:#85bb65;" href="http://renturly.com">Renturly</a></h3>
+
+<!-- 
 <p><a class='btn btn-info' 'id'='payment-button' href="https://docs.google.com/document/d/10jcqjfNRlDbnJ-Dx493ERn9FSPvQq7c7MLgCI-vDmXY/edit">Bird Dogs' Contract</a></p>
+-->
 
-<p><a href="mailto:<?php print($portfolio->email); ?>">Send  money to Common Shareholders.</a></p>
+<!-- 
+<p><a href="mailto:<?php print($portfolio->email); ?>">Send  money to Common Shareholders.</a></p> 
+-->
 
-<div id='collection-component-1672031848197'></div>
+<div id='collection-component-1689892372906'></div>
 <script type="text/javascript">
 /*<![CDATA[*/
 (function () {
@@ -97,8 +127,8 @@ $communication = Property::model()->findAll($criteria);
     });
     ShopifyBuy.UI.onReady(client).then(function (ui) {
       ui.createComponent('collection', {
-        id: '290888941727',
-        node: document.getElementById('collection-component-1672031848197'),
+        id: '293532827807',
+        node: document.getElementById('collection-component-1689892372906'),
         moneyFormat: '%24%7B%7Bamount%7D%7D',
         options: {
   "product": {
@@ -172,8 +202,6 @@ $communication = Property::model()->findAll($criteria);
 })();
 /*]]>*/
 </script>
-
-</div>
 
 
 
